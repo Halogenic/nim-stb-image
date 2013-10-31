@@ -11,11 +11,12 @@ type
     width*: int
     height*: int
     depth*: int
+    data*: int8
 
 proc load*(filename: string) =
   var
     width = 0
     height = 0
     depth = 0
-    
-  let data: cstring = stbi_load(filename, width, height, depth, 0)
+
+  let data = stbi_load(filename, width, height, depth, 0)
