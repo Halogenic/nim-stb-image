@@ -1,22 +1,29 @@
+import unsigned
+
 # FFI procs
 
-proc stbi_load(filename: cstring, x: int, y: int, comp: int, req_comp: int): cstring
-  {.cdecl, importc, dynlib: "libstb_image.so".}
+type
+  PUChar* = ptr cchar
+
+proc stbi_load(filename: cstring, x, y, comp: var cint, req_comp: int): PUChar
+  {.cdecl, importc: "stbi_load", dynlib: "libstb_image.so".}
 
 
 # Public interface
 
 type
-  TImage* = object of TObject
-    width*: int
-    height*: int
-    depth*: int
-    data*: int8
+  TImage* = object
+    width*: cint
+    height*: cint
+    depth*: cint
+    data*: uint8
 
 proc load*(filename: string) =
   var
-    width = 0
-    height = 0
-    depth = 0
+    width: cint
+    height: cint
+    depth: cint
 
   let data = stbi_load(filename, width, height, depth, 0)
+
+#  TImage(width: int(width), height: int(height), depth: int(depth), data: uint8(data))
